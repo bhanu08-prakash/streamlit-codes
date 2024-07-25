@@ -1,3 +1,4 @@
+import streamlit as st
 import google.generativeai as genai
 import json
 
@@ -64,23 +65,26 @@ def generate_recipe(food, profession, dietary_preference, cuisine_type, meal_typ
         print(f"An error occurred: {e}")
         return None
 
-# Example usage
-food = input("Enter the main food ingredient: ")
-profession = input("Enter the target profession: ")
-dietary_preference = input("Enter dietary preferences (e.g., vegan, gluten-free): ")
-cuisine_type = input("Enter the type of cuisine: ")
-meal_type = input("Enter the type of meal (e.g., breakfast, lunch): ")
-skill_level = input("Enter the skill level required (e.g., beginner, intermediate): ")
-cooking_time = input("Enter the approximate cooking time: ")
+# Streamlit UI
+st.title("AI Recipe Generator")
 
-recipe = generate_recipe(food, profession, dietary_preference, cuisine_type, meal_type, skill_level, cooking_time)
+food = st.text_input("Enter the main food ingredient:")
+profession = st.text_input("Enter the target profession:")
+dietary_preference = st.text_input("Enter dietary preferences (e.g., vegan, gluten-free):")
+cuisine_type = st.text_input("Enter the type of cuisine:")
+meal_type = st.text_input("Enter the type of meal (e.g., breakfast, lunch):")
+skill_level = st.selectbox("Select the skill level required:", ["beginner", "intermediate", "advanced"])
+cooking_time = st.text_input("Enter the approximate cooking time:")
 
-if recipe:
-    print("Ingredients:")
-    for ingredient in recipe["ingredients"]:
-        print("- " + ingredient)
-    print("\nInstructions:")
-    for step in recipe["instructions"]:
-        print("- " + step)
-else:
-    print("Failed to generate recipe.")
+if st.button("Generate Recipe"):
+    recipe = generate_recipe(food, profession, dietary_preference, cuisine_type, meal_type, skill_level, cooking_time)
+
+    if recipe:
+        st.header("Ingredients")
+        for ingredient in recipe["ingredients"]:
+            st.write("- " + ingredient)
+        st.header("Instructions")
+        for step in recipe["instructions"]:
+            st.write("- " + step)
+    else:
+        st.error("Failed to generate recipe.")
