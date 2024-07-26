@@ -83,8 +83,6 @@ if st.button("Generate Recipe"):
         st.header("Ingredients")
         for ingredient in recipe["ingredients"]:
             st.write("- " + ingredient)
-        st.header("Instructions")
-        for step in recipe["instructions"]:
-            st.write("- " + step)
+        
     else:
         st.error("Failed to generate recipe.")
